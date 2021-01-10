@@ -91,14 +91,24 @@ c('.pizzaInfo--addButton').addEventListener('click',()=>{
     //PEGAR QUANTAS PIZZAS SELECIONEI
    // console.log('Quantidade: '+modalQT);
 
+   let identifier = pizzaJson[modalKey].id+'@'+size;
+   
+   let key = cart.findIndex((item)=>item.identifier == identifier);
+
+   if(key > -1){
+    cart[key].qt += modalQT;
+   }else {
    cart.push({
-    id:pizzaJson[modalKey].id,
+   identifier,
+   id:pizzaJson[modalKey].id,
     size,
     qt: modalQT
    });
-   console.log(cart);
+}
    closeModal();
+   console.log(cart);
 });
+
 
 
 
