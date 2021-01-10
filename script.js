@@ -1,4 +1,7 @@
 let modalQT = 1;
+let modalKey = 0;
+let modalName = '';
+let cart = [];
 
 const c = (el)=> document.querySelector(el);
 
@@ -20,6 +23,8 @@ pizzaJson.map((item,index)=>{
         event.preventDefault();
         let key = event.target.closest('.pizza-item').getAttribute('data-key');
         modalQT = 1;
+        modalKey = key;
+        modalName = item.name;
         c('.pizzaInfo h1').innerHTML = pizzaJson[key].name;
         c('.pizzaInfo--desc').innerHTML = pizzaJson[key].description;
         c('.pizzaBig img').src = pizzaJson[key].img;
@@ -47,11 +52,53 @@ pizzaJson.map((item,index)=>{
 
 //EVENTOS DO MODAL 
 
+function closeModal() {
+    c('.pizzaWindowArea').style.opacity = 0;
+    setTimeout(()=>{
+        c('.pizzaWindowArea').style.display = 'none';
+    },500);
+}
 
+cs('.pizzaInfo--cancelButton, .pizzaInfo--cancelMobileButton').forEach((item)=>{
+    item.addEventListener('click',closeModal);
+})
 
+c('.pizzaInfo--qtmenos').addEventListener('click',()=> {
+    if (modalQT > 1){
+    modalQT--;
+    c('.pizzaInfo--qt').innerHTML = modalQT; 
+    }
+});
 
+c('.pizzaInfo--qtmais').addEventListener('click',()=> {
+    modalQT++;
+    c('.pizzaInfo--qt').innerHTML = modalQT;
+});
 
+cs('.pizzaInfo--size').forEach((size,sizeIndex)=>{
+    size.addEventListener('click',(e)=>{
+        c('.pizzaInfo--size.selected').classList.remove('selected'); 
+        size.classList.add('selected');  
+    })
+});
 
+//ADICIONANDO AO CARRINHO
+c('.pizzaInfo--addButton').addEventListener('click',()=>{
+    //  pegando qual a pizza eu selecionei
+    //console.log('Pizza: '+ modalKey);
+    //PEGAR O TAMANHO SELECIONADO
+    let size = parseInt(c('.pizzaInfo--size.selected').getAttribute('data-key'));
+    //PEGAR QUANTAS PIZZAS SELECIONEI
+   // console.log('Quantidade: '+modalQT);
+
+   cart.push({
+    id:pizzaJson[modalKey].id,
+    size,
+    qt: modalQT
+   });
+   console.log(cart);
+   closeModal();
+});
 
 
 
